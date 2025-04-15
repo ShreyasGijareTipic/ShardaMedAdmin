@@ -60,6 +60,10 @@ const ProductTable = React.lazy(() => import('./views/pages/product/ProductTable
 const AddDoctor = React.lazy(() => import('./views/pages/Doctor/AddDoctor.js'))
 const DoctorsTable = React.lazy(() => import('./views/pages/Doctor/DoctorTable.js'))
 
+//Customer
+const CustomerTable = React.lazy(()=>import('./views/pages/customer/CustomerTable.js'))
+const CustomerOrderDetails = React.lazy(()=>import('./views/pages/customer/customeOrderDetails.js'))
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
@@ -114,6 +118,10 @@ const routes = [
   //Doctors
   { path: '/addDoctor', name: 'Add Doctor', element: AddDoctor },
   { path: '/doctors', name: 'All Doctors', element: DoctorsTable },
+
+  //Customer
+  { path: '/customer', name: 'Customer Table', element: CustomerTable },
+  { path: '/customerOrder/:id', name: 'Customer Order Details', element: CustomerOrderDetails}
 ]
 
 export default routes
