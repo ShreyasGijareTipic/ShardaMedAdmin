@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { element } from 'prop-types'
 import React from 'react'
 
@@ -55,6 +56,8 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 //Products
 const AddProduct = React.lazy(() => import('./views/pages/product/AddProduct.js'))
 const ProductTable = React.lazy(() => import('./views/pages/product/ProductTable.js'))
+const Categories = React.lazy(() => import('./views/pages/product/Categories.js'))
+
 
 //Doctors
 const AddDoctor = React.lazy(() => import('./views/pages/Doctor/AddDoctor.js'))
@@ -114,6 +117,7 @@ const routes = [
   //Products
   { path: '/addProduct', name: 'Add Product', element: AddProduct },
   { path: '/products', name: 'Products Table', element: ProductTable },
+  { path: '/categories', name: 'Categories Table', element: Categories },
 
   //Doctors
   { path: '/addDoctor', name: 'Add Doctor', element: AddDoctor },

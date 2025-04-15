@@ -1,60 +1,64 @@
-import React, { useState, useEffect } from 'react'
-import { Table, Button, Pagination } from 'react-bootstrap'
-import { getAPICall, deleteAPICall } from '../../../util/api.js'
-import ProductModal from './ProductModal'
+import React, { useState, useEffect } from "react";
+import { Table, Button, Pagination } from "react-bootstrap";
+import { getAPICall, deleteAPICall } from "../../../util/api.js";
+import ProductModal from "./ProductModal";
 
 const ProductTable = () => {
-  const [products, setProducts] = useState([])
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchProducts = async (page = 1) => {
     try {
-      const response = await getAPICall(`/api/products?page=${page}`)
+      const response = await getAPICall(`/api/products?page=${page}`);
 
-      if (response && response.products && Array.isArray(response.products.data)) {
-        setProducts(response.products.data)
-        setCurrentPage(response.products.current_page)
-        setTotalPages(response.products.last_page)
+      if (
+        response &&
+        response.products &&
+        Array.isArray(response.products.data)
+      ) {
+        setProducts(response.products.data);
+        setCurrentPage(response.products.current_page);
+        setTotalPages(response.products.last_page);
       } else {
-        console.error('Invalid response structure:', response)
-        setProducts([])
+        console.error("Invalid response structure:", response);
+        setProducts([]);
       }
     } catch (error) {
-      console.error('Error fetching products:', error)
-      setProducts([])
+      console.error("Error fetching products:", error);
+      setProducts([]);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchProducts(currentPage)
-  }, [currentPage])
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
   const handleUpdateClick = (product) => {
-    setSelectedProduct(product)
-  }
+    setSelectedProduct(product);
+  };
 
   const handleDeleteClick = async (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
+    if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await deleteAPICall(`/api/products/${id}`)
-        fetchProducts(currentPage)
+        await deleteAPICall(`/api/products/${id}`);
+        fetchProducts(currentPage);
       } catch (error) {
-        console.error('Error deleting product:', error)
+        console.error("Error deleting product:", error);
       }
     }
-  }
+  };
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber)
-      fetchProducts(pageNumber)
+      setCurrentPage(pageNumber);
+      fetchProducts(pageNumber);
     }
-  }
+  };
 
   const renderPagination = () => {
-    let items = []
+    let items = [];
 
     for (let number = 1; number <= totalPages; number++) {
       items.push(
@@ -65,7 +69,7 @@ const ProductTable = () => {
         >
           {number}
         </Pagination.Item>,
-      )
+      );
     }
 
     return (
@@ -80,8 +84,8 @@ const ProductTable = () => {
           disabled={currentPage === totalPages}
         />
       </Pagination>
-    )
-  }
+    );
+  };
 
   return (
     <div>
@@ -100,6 +104,7 @@ const ProductTable = () => {
             <th>Available</th>
             <th>Weight</th>
             <th>Weight Type</th>
+            <th>Category</th>
             <th>Quantity</th>
             <th>Thumbnail</th>
             <th>Product Images</th>
@@ -117,24 +122,30 @@ const ProductTable = () => {
                 <td>{product.discount_percentage}</td>
                 <td>{product.cutting_status}</td>
                 <td>{product.manufacturer}</td>
-                <td>{product.schedule_h ? 'Yes' : 'No'}</td>
-                <td>{product.available ? 'Yes' : 'No'}</td>
+                <td>{product.schedule_h ? "Yes" : "No"}</td>
+                <td>{product.available ? "Yes" : "No"}</td>
                 <td>{product.weight}</td>
                 <td>{product.weight_type}</td>
+                <td>{product.category?.category || "N/A"}</td>
                 <td>{product.qty}</td>
                 <td>
                   {product.thumbnail ? (
                     <img src={product.thumbnail} alt="Thumbnail" width="50" />
                   ) : (
-                    'No Image'
+                    "No Image"
                   )}
                 </td>
                 <td>
                   {product.images && product.images.length > 0
                     ? product.images.map((image, index) => (
-                        <img key={index} src={image} alt="Product Image" width="50" />
+                        <img
+                          key={index}
+                          src={image}
+                          alt="Product Image"
+                          width="50"
+                        />
                       ))
-                    : 'No Images'}
+                    : "No Images"}
                 </td>
                 <td>
                   <Button
@@ -145,7 +156,11 @@ const ProductTable = () => {
                   >
                     Update
                   </Button>
-                  <Button variant="danger" size="sm" onClick={() => handleDeleteClick(product.id)}>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDeleteClick(product.id)}
+                  >
                     Delete
                   </Button>
                 </td>
@@ -171,7 +186,7 @@ const ProductTable = () => {
         currentPage={currentPage}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ProductTable
+export default ProductTable;
